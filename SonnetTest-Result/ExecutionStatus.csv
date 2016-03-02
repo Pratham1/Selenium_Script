@@ -1,0 +1,3 @@
+test_plan_id,environment,product_id,test_run_id,status,test_case_id,test_method,product_version,summary,priority,build
+,1,2,9,2,,reportAbug,V1.0,,,1
+,1,2,9,3,,feature,V1.0,,,1

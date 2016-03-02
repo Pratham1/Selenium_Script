@@ -1,0 +1,14 @@
+------ Beginning of Test Suite - Default test -
+
+------ Beginning of Test - reportAbug - Bug Reporting
+Start time : Wed Feb 17 18:52:36 IST 2016
+News Tab is open : Pass
+Bug Reporting page is open : Pass
+
+End time : Wed Feb 17 18:52:51 IST 2016
+------ Test execution succesful-
+
+------ Beginning of Test - feature - Bug Reporting
+Start time : Wed Feb 17 18:53:00 IST 2016
+Feature page is open : Pass
+VALIDATION: Feature header is present  : Fail

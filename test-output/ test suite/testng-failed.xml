@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [ test suite]">
+  <test name="Regression 1(failed)">
+    <classes>
+      <class name="scripts.DriverScript">
+        <methods>
+          <include name="reportAbug"/>
+          <include name="data"/>
+          <include name="test_start"/>
+          <include name="exit"/>
+        </methods>
+      </class> <!-- scripts.DriverScript -->
+    </classes>
+  </test> <!-- Regression 1(failed) -->
+</suite> <!-- Failed suite [ test suite] -->

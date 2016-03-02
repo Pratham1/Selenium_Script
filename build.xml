@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="SonnetTest" basedir="." default="all-test">
+	<!-- PDF-Reports for JUnit -->
+	<import file="../SonnetTest/lib/ant/junitpdfreport/build-junitpdfreport.xml" />
+	<property environment="env"/>
+	<property name="DEBUG" value="true" />
+	<property name="VERBOSE" value="true" />
+	<property name="TARGET" value="1.6" />
+	<property name="build.dir" value="bin" />
+	<property name="xms" value="-Xms256m" />
+	<property name="xmx" value="-Xmx1024m" />
+	<property name="src.dir" location="${basedir}/src" />
+	<property name="lib.dir" location="${basedir}/jars" />
+    <property name="bin.dir" location="${basedir}/bin" />
+	<propertyfile file="sonnettest.properties">
+		<entry  key="browser_name" value="${Browser}"/>
+		<entry  key="url" value="${Url}"/>
+		<entry  key="run_id" value="${Test_Run_Id}"/>
+		<entry  key="groups_id" value="${Groups}"/>
+		<entry  key="build_no" value="${Build_No}"/>
+	</propertyfile>
+	
+	<copy file="${basedir}/sonnettest.properties" todir="C:/work/apache-jmeter-2.13/bin"/>
+	<path id="reference">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement location="${bin.dir}" />
+	</path>
+	
+	<taskdef resource="testngtasks" classpath="${lib.dir}/testng-6.8.6beta.jar" />
+	
+	<target name="Test">
+		<testng outputdir="test-output" suitename="suite1">
+			<classpath refid="reference" />			
+			<xmlfileset dir="${basedir}" includes="testng.xml" />
+		</testng>
+	</target>
+	
+	<target name="Report" depends="Test">
+		<tstamp>
+			<format property="current.time" pattern="MM/dd/yyyy hh:mm:ss aa" />
+		</tstamp>
+		<loadproperties srcFile="sonnettest.properties"/>
+		<copy file="${product_logo}"  tofile="${basedir}/SonnetTest-Result/test/logo.png" overwrite="true"/>
+	    <delete>
+	    	<fileset dir="SonnetTest-Result/archive" includes="**/*.html"/>
+	    </delete>
+	    <junitreport todir="${basedir}/SonnetTest-Result"><!--consolidated xml file location-->
+	    	<fileset dir="${xml_file_location}">
+	        	<include name="TEST-*.xml" />
+	        </fileset>             
+	        <report styledir="SonnetTest-Result/test/junitreport" format="frames" todir="${basedir}/SonnetTest-Result">
+				<param name="URL" expression="${url}"/>
+				<param name="BrowserName" expression="${browser_name}"/>
+				<param name="BrowserVersion" expression="${browser_version}"/>
+				<param name="ExecutedOn" expression="${current.time}"/>
+				<param name="Product_Logo" expression="../test/logo.png"/>
+			</report>
+		</junitreport>
+		<!-- Generate PDF report -->
+		<junitpdfreport todir="${basedir}/SonnetTest-Result" styledir="SonnetTest-Result/test/junitpdfreport/default" reportdir="SonnetTest-Result">
+			<fileset dir="${xml_file_location}">
+				<include name="TEST-*.xml" />
+			</fileset>
+		</junitpdfreport>
+	</target>
+	
+	<!--<target name="bugzilla" depends="Report" >
+		<copy file="${basedir}/SonnetTest-Result/ExecutionStatus.csv" todir="C:/work/apache-jmeter-2.13/bin"/>
+		<copy file="${basedir}/SonnetTest-Result/Defects.csv" todir="C:/work/apache-jmeter-2.13/bin"/>
+		<taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
+		<jmeter jmeterhome="C:/work/apache-jmeter-2.13" resultlog="C:/work/apache-jmeter-2.13/bin/Defect_Management.jtl">
+			<testplans dir="C:/work/apache-jmeter-2.13/bin" includes="Defect_Management.jmx"/>
+		</jmeter>					
+	</target>
+	
+	<target name="testopia" depends="bugzilla" >
+		<taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
+		<jmeter jmeterhome="C:/work/apache-jmeter-2.13" resultlog="C:/work/apache-jmeter-2.13/bin/Testopia.jtl">
+			<testplans dir="C:/work/apache-jmeter-2.13/bin" includes="Testopia_update_status_withRunID.jmx"/>
+		</jmeter>			
+	</target>-->
+	
+	<target name="all-test" depends="Report" />	
+</project>
